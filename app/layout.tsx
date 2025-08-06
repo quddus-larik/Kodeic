@@ -5,6 +5,10 @@ import { Providers } from "./providers";
 import { fontSans } from "@/config/fonts";
 import type { Metadata } from "next";
 
+// Clerk imports
+import { ClerkProvider } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { headers } from "next/headers";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -14,8 +18,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Shadcn",
-  description: "Dashboard with Modes",
+  title: "Kodeic",
+  description: "Dashboard Ai",
 };
 
 export default function RootLayout({
@@ -23,23 +27,25 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const clerkHeaders = headers(); // for SSR
+
   return (
-    <html suppressHydrationWarning lang="en">
-      <head />
-      <body
-        className={clsx(
-          "min-h-screen text-foreground bg-background font-sans antialiased",
-          fontSans.variable
-        )}
-      >
-        
+    <ClerkProvider headers={clerkHeaders}>
+      <html suppressHydrationWarning lang="en">
+        <head />
+        <body
+          className={clsx(
+            "min-h-screen text-foreground bg-background font-sans antialiased",
+            fontSans.variable
+          )}
+        >
           <Providers>
             <div>
               <main className="container">{children}</main>
             </div>
           </Providers>
-        
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

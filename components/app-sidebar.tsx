@@ -12,7 +12,13 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  LayoutGrid,
+  DiamondPlus,
+  ChartPie
 } from "lucide-react"
+//Auths
+
+import { useUser } from "@clerk/nextjs";
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
@@ -26,13 +32,9 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
+
+
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Acme Inc",
@@ -52,18 +54,18 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Repository Stats",
+      url: "/dashboard",
+      icon: LayoutGrid,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Overview",
+          url: "/dashboard/overview",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Repositories",
+          url: "/dashboard/[username]/repos",
         },
         {
           title: "Settings",
@@ -72,45 +74,25 @@ const data = {
       ],
     },
     {
-      title: "Models",
+      title: "Create",
       url: "#",
-      icon: Bot,
+      icon: DiamondPlus,
       items: [
         {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
+          title: "Markdown",
+          url: "/create/markdown",
         },
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
+      title: "Analysis",
+      url: "/analysis",
+      icon: ChartPie,
       items: [
         {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
+          title: "Bugs & Alerts",
+          url: "/analysis/bugs",
+        }
       ],
     },
     {
@@ -123,15 +105,7 @@ const data = {
           url: "#",
         },
         {
-          title: "Team",
-          url: "#",
-        },
-        {
           title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
           url: "#",
         },
       ],
@@ -157,6 +131,11 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const { user, isLoaded, isSignedIn } = useUser();
+  
+    console.log(user)
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -167,7 +146,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
