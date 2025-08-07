@@ -2,9 +2,13 @@
 import { CoreUI } from "@/layouts/core-ui"
 import {
     Table,
-    Tablebody
-}
-export default function Page(){
+    TableBody,
+    TableHeader,
+    TableCell,
+    TableRow,
+    TableFooter
+} from '@/components/ui/table'
+function Page (){
 
     return (
         <CoreUI>
@@ -14,3 +18,4 @@ export default function Page(){
         </CoreUI>
     )
 }
+export default Page;

@@ -2,9 +2,9 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const { userId } = await auth(); // Synchronous call
+  const { userId } = await auth(); // aSynchronous call
   if (!userId) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "You are Not Authenticated" }, { status: 401 });
   }
 
   try {
