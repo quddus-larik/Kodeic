@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   AudioWaveform,
   BookOpen,
@@ -14,127 +14,124 @@ import {
   SquareTerminal,
   LayoutGrid,
   DiamondPlus,
-  ChartPie
-} from "lucide-react"
+  ChartPie,
+} from "lucide-react";
 //Auths
 
 import { useUser } from "@clerk/nextjs";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
-
-
-const data = {
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Repository Stats",
-      url: "/dashboard",
-      icon: LayoutGrid,
-      isActive: true,
-      items: [
-        {
-          title: "Overview",
-          url: "/dashboard/overview",
-        },
-        {
-          title: "Repositories",
-          url: "/dashboard/[username]/repos",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Create",
-      url: "#",
-      icon: DiamondPlus,
-      items: [
-        {
-          title: "Markdown",
-          url: "/create/markdown",
-        },
-      ],
-    },
-    {
-      title: "Analysis",
-      url: "/analysis",
-      icon: ChartPie,
-      items: [
-        {
-          title: "Bugs & Alerts",
-          url: "/analysis/bugs",
-        }
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {  
   const { user, isLoaded, isSignedIn } = useUser();
-  
-    console.log(user)
+  const data = {
+    teams: [
+      {
+        name: "Acme Inc",
+        logo: GalleryVerticalEnd,
+        plan: "Enterprise",
+      },
+      {
+        name: "Acme Corp.",
+        logo: AudioWaveform,
+        plan: "Startup",
+      },
+      {
+        name: "Evil Corp.",
+        logo: Command,
+        plan: "Free",
+      },
+    ],
+    navMain: [
+      {
+        title: "Repository Stats",
+        url: "/dashboard",
+        icon: LayoutGrid,
+        isActive: true,
+        items: [
+          {
+            title: "Overview",
+            url: "/dashboard/overview",
+          },
+          {
+            title: "Repositories",
+            url: `/dashboard/${user?.username}/repos`,
+          },
+          {
+            title: "Settings",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Create",
+        url: "#",
+        icon: DiamondPlus,
+        items: [
+          {
+            title: "Markdown",
+            url: "/create/markdown",
+          },
+        ],
+      },
+      {
+        title: "Analysis",
+        url: "/analysis",
+        icon: ChartPie,
+        items: [
+          {
+            title: "Bugs & Alerts",
+            url: "/analysis/bugs",
+          },
+        ],
+      },
+      {
+        title: "Settings",
+        url: "#",
+        icon: Settings2,
+        items: [
+          {
+            title: "General",
+            url: "#",
+          },
+          {
+            title: "Billing",
+            url: "#",
+          },
+        ],
+      },
+    ],
+    projects: [
+      {
+        name: "Design Engineering",
+        url: "#",
+        icon: Frame,
+      },
+      {
+        name: "Sales & Marketing",
+        url: "#",
+        icon: PieChart,
+      },
+      {
+        name: "Travel",
+        url: "#",
+        icon: Map,
+      },
+    ],
+  };
+
+
+  console.log(user);
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -150,5 +147,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

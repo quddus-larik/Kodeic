@@ -1,22 +1,21 @@
-// app/api/repos/route.ts
-import { auth, clerkClient } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { currentUser, auth } from "@clerk/nextjs/server";
 
-export async function GET(request: Request) {
-  const { userId } = auth();
-  if (!userId) {
-    return NextResponse.json({ error: 'User not authenticated' }, { status: 401 });
+export async function GET() {
+  const { userId } = await auth();
+  const user = await currentUser();
+
+  // Get external accounts
+  const externalAccounts = user?.externalAccounts || [];
+
+  const githubAccount = externalAccounts.find(
+    (acc) => acc.provider === "oauth_github"
+  );
+
+
+  if (!githubAccount) {
+    return Response.json({ error: "No GitHub account linked" }, { status: 404 });
   }
 
-  try {
-    const { data } = await clerkClient().users.getUserOauthAccessToken(userId, 'oauth_github');
-    const accessToken = data[0]?.token;
-    if (!accessToken) {
-      return NextResponse.json({ error: 'No GitHub token found' }, { status: 400 });
-    }
-    return NextResponse.json({ accessToken });
-  } catch (error) {
-    console.error('Error fetching GitHub token:', error);
-    return NextResponse.json({ error: 'Failed to fetch GitHub token' }, { status: 500 });
-  }
+
+  return Response.json({ userId },{ status: 200 });
 }
