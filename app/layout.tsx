@@ -27,10 +27,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const clerkHeaders = headers(); // for SSR
 
   return (
-    <ClerkProvider headers={clerkHeaders}>
+    <ClerkProvider>
       <html suppressHydrationWarning lang="en">
         <head />
         <body

@@ -1,32 +1,46 @@
-import { auth, clerkClient } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 export async function GET() {
+  const { userId } = await auth(); // Synchronous call
+  if (!userId) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
   try {
-    // Get user ID from Clerk session
-    const { userId } = auth();
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Fetch GitHub OAuth token
-    const tokens = await clerkClient.users.getUserOauthAccessToken(
+    const client = await clerkClient();
+    const { data } = await client.users.getUserOauthAccessToken(
       userId,
-      'oauth_github' // This must match the provider ID in Clerk (case-sensitive)
+      "github"
     );
 
-    const accessToken = tokens?.[0]?.token;
-
-    if (!accessToken) {
-      return NextResponse.json({ error: 'No GitHub token found' }, { status: 400 });
+    if (!data?.length) {
+      return NextResponse.json(
+        { error: "No OAuth token found" },
+        { status: 400 }
+      );
     }
 
-    // Success
-    return NextResponse.json({ accessToken }, { status: 200 });
+    const accessToken = data[0]?.token;
+    if (!accessToken) {
+      return NextResponse.json({ error: "Token missing" }, { status: 400 });
+    }
 
-  } catch (error) {
-    console.error('Error fetching GitHub token:', error);
-    return NextResponse.json({ error: 'Failed to fetch GitHub token' }, { status: 500 });
+    const response = await fetch("https://api.github.com/user/repos", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/vnd.github.v3+json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`GitHub API: ${response.status} ${response.statusText}`);
+    }
+
+    const repos = await response.json();
+    return NextResponse.json({ repositories: repos });
+  } catch (err: any) {
+    console.error("Fetch error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
