@@ -29,7 +29,7 @@ export async function GET() {
     const response = await fetch("https://api.github.com/user/repos", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        Accept: "application/vnd.github.v3+json",
+        Accept: "application/vnd.github.v3+json"
       },
     });
 

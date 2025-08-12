@@ -5,6 +5,9 @@ import type { ThemeProviderProps } from "next-themes";
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { ThemeProvider } from "./providers/theme-provider";
+import { 
+  TooltipProvider
+ } from "@/components/ui/tooltip";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -29,7 +32,10 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       enableSystem
       disableTransitionOnChange
     >
+      <TooltipProvider>
+
       {children}
+      </TooltipProvider>
     </ThemeProvider>
   );
 }
