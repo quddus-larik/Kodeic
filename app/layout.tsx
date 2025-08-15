@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Kodeic",
+  title: "oneRepo",
   description: "Dashboard Ai",
 };
 

@@ -1,4 +1,4 @@
-import { currentUser, auth } from "@clerk/nextjs/server";
+import { currentUser, auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function GET() {
   const { userId } = await auth();
@@ -16,6 +16,18 @@ export async function GET() {
     return Response.json({ error: "No GitHub account linked" }, { status: 404 });
   }
 
+  const client = await clerkClient();
+  const { data } = await client.users.getUserOauthAccessToken(userId, "oauth_github");
 
-  return Response.json({ userId },{ status: 200 });
+  if (!data?.length) {
+    return Response.json({ error: "No OAuth token found" }, { status: 400 });
+  }
+
+  const accessToken = data[0]?.token;
+  if (!accessToken) {
+    return Response.json({ error: "Token missing" }, { status: 400 });
+  }
+
+
+  return Response.json({ userId, accessToken }, { status: 200 });
 }
