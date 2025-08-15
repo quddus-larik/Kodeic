@@ -57,7 +57,7 @@ function Page() {
     );
   }, [search, repos]);
 
-  if (loading) return <p>Getting Started...<span>Loading</span></p>;
+  if (loading) return <p>Getting Started...</p>;
 
   async function fetchCommits(owner: string, repo: string) {
     try {
